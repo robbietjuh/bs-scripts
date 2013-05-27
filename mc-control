@@ -123,7 +123,7 @@ in
         ;;
     restart)
         # Check if the server is reachable
-        if [ $( check_online ) -eq 1 ]; then
+        if [ $( check_online ) -eq 0 ]; then
             if [ $( "ps aux|grep java|wc -l" ) -ge 2 ]; then
                 if [ $QUIETE -eq 0 ]; then
                     log "The server is running but is unreachable or doesn't respond.\n"
@@ -169,6 +169,41 @@ in
             sleep 1
         done
         log " OK\n"
+    stop)
+        # Check if the server is reachable
+        if [ $( check_online ) -eq 0 ]; then
+            if [ $( "ps aux|grep java|wc -l" ) -ge 2 ]; then
+                if [ $QUIETE -eq 0 ]; then
+                    log "The server is running but is unreachable or doesn't respond.\n"
+                    read -p "Do you want to force kill and restart the server [y/N]?"
+                    if [ $REPLY -eq "y" ]; then
+                        log " * Killing all java instances... "
+                        killall -9 java
+                        log "OK\n"
+                    else
+                        exit 1
+                    fi
+                else
+                    exit 1
+                fi
+            else
+                log " * Server seems to be stopped.\n"
+            fi
+        else
+            log " * Stopping the server."
+
+            # Stop the server
+            rcon_command "stop"
+
+            # Wait till the server is down
+            while [ $( check_online ) -eq 1 ]; do
+                log "."
+                sleep 1
+            done
+
+            sleep 5 #Just in case
+            log " OK\n"
+        fi
     *)
         usage
         ;;
