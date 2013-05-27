@@ -33,6 +33,7 @@ usage() {
     echo "  watch    Watch the server's live log"
     echo "  tps      Watch the server's live Tick-per-second stats on 1-second interval"
     echo "  list     Fetch online users"
+    echo "  rcon     Open an rcon console"
     echo
     echo "Example:"
     echo "  mc-control watch -s 85.12.6.48 -p p@ssw0rd -f 'logged in with'"
@@ -79,7 +80,7 @@ do
             FILTER=$2
             shift
         ;;
-        start|status|restart|stop|save|watch|tps|list) ACTION=$1;;
+        start|status|restart|stop|save|watch|tps|list|rcon) ACTION=$1;;
         *)
             echo "Unknown option: $1"
             echo
