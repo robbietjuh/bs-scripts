@@ -222,8 +222,13 @@ in
     watch)
         # Check if the server log file exists
         if [ -f $PATH_LOG ]; then
-            # Tail the log
-            tail -f $PATH_LOG
+            if [ $FILTER -eq "" ]; then
+                # Tail the log
+                tail -f $PATH_LOG
+            else
+                # Tail the log and pipe it through grep
+                tail -f $PATH_LOG | grep $FILTER
+            fi
         else
             log "$PATH_LOG: no such file or directory\n"
         fi
