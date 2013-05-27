@@ -109,6 +109,13 @@ in
             log " FAIL\n"
         fi
         ;;
+    status)
+        if [ $( check_online ) -eq 1 ]; then
+            log "The server is reachable and responding.\n"
+        else
+            log "Could not poll the server - it could be down or unresponsive.\n"
+        fi
+        ;;
     *)
         usage
         ;;
