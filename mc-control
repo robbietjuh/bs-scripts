@@ -219,6 +219,15 @@ in
         rcon_command "save-all"
         log "OK\n"
         ;;
+    watch)
+        # Check if the server log file exists
+        if [ -f $PATH_LOG ]; then
+            # Tail the log
+            tail -f $PATH_LOG
+        else
+            log "$PATH_LOG: no such file or directory\n"
+        fi
+        ;;
     *)
         usage
         ;;
