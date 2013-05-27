@@ -27,6 +27,7 @@ usage() {
     echo "Commands:"
     echo "  start    Start the server"
     echo "  status   Check wether the server is up or not"
+    echo "  restart  Restart the server"
     echo "  stop     Stop the server"
     echo "  save     Send save-all command to the server"
     echo "  watch    Watch the server's live log"
@@ -74,7 +75,7 @@ do
             FILTER=$2
             shift
         ;;
-        start|status|stop|save|watch|tps|list) ACTION=$1;;
+        start|status|restart|stop|save|watch|tps|list) ACTION=$1;;
         *)
             echo "Unknown option: $1"
             echo
