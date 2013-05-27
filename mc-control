@@ -40,6 +40,12 @@ usage() {
     exit 1
 }
 
+log() {
+    if [ $QUIETE -eq 0 ]; then
+        echo "$1"
+    fi
+}
+
 # Process arguments
 while [ $# -gt 0 ];
 do
@@ -70,8 +76,11 @@ do
 done
 
 # Process action
-case ACTION
+case "$ACTION"
 in
+    start)
+        log "Todo: implement"
+        ;;
     *)
         usage
         ;;
