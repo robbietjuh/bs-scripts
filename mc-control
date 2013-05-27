@@ -1,0 +1,78 @@
+#!/bin/bash
+#
+# Script to control (start, stop, restart, save, watch, ...) a Minecraft server
+#
+
+# Default settings
+SERVER_IP="127.0.0.1"
+PATH_START_SCRIPT="/mnt/ramdisk/minecraft/start.sh"
+PATH_LOG="/mnt/ramdisk/minecraft/server.log"
+RCON_PASSWORD=""
+RCON_PORT=25575
+MCRCON_PATH="mcrcon"
+QUIETE=0
+FILTER=""
+
+# Print usage
+usage() {
+    echo "Usage: mc-control [-opts] [cmd]"
+    echo
+    echo "Options:"
+    echo "  -h       Display this message"
+    echo "  -s       Specify a non-default server IP"
+    echo "  -p       Specify a non-default rcon password"
+    echo "  -q       Don't output any status messages"
+    echo "  -f       Filter logs"
+    echo
+    echo "Commands:"
+    echo "  start    Start the server"
+    echo "  stop     Stop the server"
+    echo "  save     Send save-all command to the server"
+    echo "  watch    Watch the server's live log"
+    echo "  tps      Watch the server's live Tick-per-second stats on 1-second interval"
+    echo "  list     Fetch online users"
+    echo
+    echo "Example:"
+    echo "  mc-control watch -s 85.12.6.48 -p p@ssw0rd -f 'logged in with'"
+    echo "  mc-control start"
+    echo "  mc-control stop -q"
+
+    exit 1
+}
+
+# Process arguments
+while [ $# -gt 0 ];
+do
+    case "$1"
+    in
+        -h|--help|--usage) usage;;
+        -s|--server)
+            SERVER_IP=$2
+            shift
+        ;;
+        -p|--password)
+            RCON_PASSWORD=$2
+            shift
+        ;;
+        -q|--quiete) QUIETE=1;;
+        -f|--filter)
+            FILTER=$2
+            shift
+        ;;
+        start|stop|save|watch|tps|list) ACTION=$1;;
+        *)
+            echo "Unknown option: $1"
+            echo
+            usage
+        ;;
+    esac
+    shift
+done
+
+# Process action
+case ACTION
+in
+    *)
+        usage
+        ;;
+esac
