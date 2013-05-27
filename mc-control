@@ -169,6 +169,7 @@ in
             sleep 1
         done
         log " OK\n"
+        ;;
     stop)
         # Check if the server is reachable
         if [ $( check_online ) -eq 0 ]; then
@@ -204,13 +205,14 @@ in
             sleep 5 #Just in case
             log " OK\n"
         fi
+        ;;
     save)
         # Check if the server is online
         if [ $( check_online ) -eq 0 ]; then
             log "The server seems to be down.\n"
             exit 1
         fi
-        
+
         # Send save command
         log " * Sending save command... "
         rcon_command "save-all"
