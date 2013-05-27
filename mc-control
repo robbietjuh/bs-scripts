@@ -42,7 +42,15 @@ usage() {
 
 log() {
     if [ $QUIETE -eq 0 ]; then
-        echo "$1"
+        echo -ne "$1"
+    fi
+}
+
+check_online() {
+    if [[ "$( $MCRCON_PATH -H $SERVER_IP -P $RCON_PORT -p $RCON_PASSWORD list 2>&1 )" == *"online"* ]]; then
+        echo 1
+    else
+        echo 0
     fi
 }
 
@@ -79,7 +87,26 @@ done
 case "$ACTION"
 in
     start)
-        log "Todo: implement"
+        # Start the server
+        log " * Checking if the server is down."
+
+        # Check wether the server isn't running already
+        if [ $( check_online ) -eq 0 ]; then
+            log " OK\n"
+            log " * Starting the server."
+
+            # Run the start script
+            su - minecraft -c "screen -d -S minecraft -m sh $PATH_START_SCRIPT"
+
+            # Wait till the server comes up
+            while [ $( check_online ) -eq 0 ]; do
+                log "."
+                sleep 1
+            done
+            log " OK\n"
+        else
+            log " FAIL\n"
+        fi
         ;;
     *)
         usage
