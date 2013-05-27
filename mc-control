@@ -61,6 +61,10 @@ rcon_command() {
     $( $MCRCON_PATH -H $SERVER_IP -P $RCON_PORT -p $RCON_PASSWORD $1 2>&1 )
 }
 
+rcon_output() {
+    echo $( $MCRCON_PATH -H $SERVER_IP -P $RCON_PORT -p $RCON_PASSWORD $1 )
+}
+
 # Process arguments
 while [ $# -gt 0 ];
 do
@@ -232,6 +236,20 @@ in
         else
             log "$PATH_LOG: no such file or directory\n"
         fi
+        ;;
+    tps)
+        # Check if the server is up
+        if [ $( check_online ) -eq 0 ]; then
+            log "The server seems to be down.\n"
+            exit 1
+        fi
+
+        # Check TPS every 1 second
+        log " * Fetching Ticks-per-second every 1 second.\n\n"
+        while [ true ]; do
+            log "[$( date -u )]: $( rcon_output tps )\n"
+            sleep 1
+        done
         ;;
     *)
         usage
