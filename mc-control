@@ -251,6 +251,24 @@ in
             sleep 1
         done
         ;;
+    list)
+        # Check if the server is up
+        if [ $( check_online ) -eq 0 ]; then
+            log "The server seems to be down.\n"
+            exit 1
+        fi
+
+        log "$( rcon_output list )\n"
+        ;;
+    rcon)
+        # Check if the server is up
+        if [ $( check_online ) -eq 0 ]; then
+            log "The server seems to be down.\n"
+            exit 1
+        fi
+        
+        $MCRCON_PATH -H $SERVER_IP -P $RCON_PORT -p $RCON_PASSWORD -t
+        ;;
     *)
         usage
         ;;
