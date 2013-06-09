@@ -129,7 +129,7 @@ in
     restart)
         # Check if the server is reachable
         if [ $( check_online ) -eq 0 ]; then
-            if [ $( "ps aux|grep java|wc -l" ) -ge 2 ]; then
+            if [ $( ps aux|grep java|wc -l ) -ge 2 ]; then
                 if [ $QUIETE -eq 0 ]; then
                     log "The server is running but is unreachable or doesn't respond.\n"
                     read -p "Do you want to force kill and restart the server [y/N]?"
@@ -198,6 +198,8 @@ in
         else
             log " * Stopping the server."
 
+rcon_command "kickall NAL RULES"
+
             # Stop the server
             rcon_command "stop"
 
@@ -226,7 +228,7 @@ in
     watch)
         # Check if the server log file exists
         if [ -f $PATH_LOG ]; then
-            if [ $FILTER == "" ]; then
+            if [ $FILTER -eq "" ]; then
                 # Tail the log
                 tail -f $PATH_LOG
             else
