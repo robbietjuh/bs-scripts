@@ -198,8 +198,6 @@ in
         else
             log " * Stopping the server."
 
-rcon_command "kickall NAL RULES"
-
             # Stop the server
             rcon_command "stop"
 
